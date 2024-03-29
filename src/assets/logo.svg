@@ -1,0 +1,12 @@
+<svg width="165px" height="165px" viewBox="0 0 165 165" version="1.1" xmlns="http://www.w3.org/2000/svg"
+    xmlns:xlink="http://www.w3.org/1999/xlink">
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <circle id="Oval" stroke="#B8FFDF" stroke-width="8" fill="#34495E" cx="82.5" cy="82.5" r="78.5"></circle>
+        <path
+            d="M134.819376,24.3049087 C150.966552,38.5168327 161,59.3378649 161,82.5 C161,105.667382 150.963653,126.490319 135.000286,140.859379 C119.03663,126.490863 109,105.66768 109,82.5 C109,59.4195412 118.96117,38.6659559 134.819376,24.3049087 Z"
+            id="Combined-Shape" stroke="#B8FFDF" stroke-width="8" fill="#42B883"></path>
+        <path
+            d="M29.8193764,24.3049087 C45.9665515,38.5168327 56,59.3378649 56,82.5 C56,105.667382 45.963653,126.490319 30.0002857,140.859379 C14.0366298,126.490863 4,105.66768 4,82.5 C4,59.4195412 13.9611704,38.6659559 29.8193764,24.3049087 Z"
+            id="Combined-Shape" stroke="#B8FFDF" stroke-width="8" fill="#42B883"></path>
+    </g>
+</svg>
