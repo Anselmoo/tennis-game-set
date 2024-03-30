@@ -3,7 +3,7 @@ import WelcomeItem from './WelcomeItem.vue'
 import TennisGroup from './icons/IconTennis.vue'
 import ToolingGroup from './icons/IconGroup.vue'
 
-import { ref, watch } from 'vue'
+import { ref, watch, computed } from 'vue'
 
 let numPlayers = ref(2)
 let numCourts = ref(1)
@@ -30,10 +30,10 @@ const generateTeams = (numPlayers, numCourts, isDoubles) => {
   shuffledPlayers.sort(() => Math.random() - 0.5)
 
   // Calculate the number of players per team
-  let playersPerTeam = isDoubles ? 4 : 2
+  let playersPerTeam = isDoubles ? 2 : 1
 
   // Calculate the total number of players that can play
-  let totalPlayers = numCourts * playersPerTeam
+  let totalPlayers = numCourts * 2 * playersPerTeam
 
   // If the total number of players exceeds the number of available spots, remove the excess players
   if (shuffledPlayers.length > totalPlayers) {
@@ -45,29 +45,32 @@ const generateTeams = (numPlayers, numCourts, isDoubles) => {
     teams.value.push(shuffledPlayers.slice(i, i + playersPerTeam))
   }
 
-  // Assign teams to courts
+  // Assign teams to courts and fields
   for (let i = 0; i < teams.value.length; i++) {
-    let courtIndex = i % numCourts
+    let courtIndex = Math.floor(i / 2) % numCourts
+    let field = i % 2 === 0 ? 'A' : 'B'
     if (!courts.value[courtIndex]) {
-      courts.value[courtIndex] = []
+      courts.value[courtIndex] = { A: [], B: [] }
     }
-    courts.value[courtIndex].push(teams.value[i])
+    courts.value[courtIndex][field].push(teams.value[i])
   }
 
-  // Create the sortedByPlayer array
-  sortedByPlayer.value = []
-  for (let i = 0; i < teams.value.length; i++) {
-    for (let j = 0; j < teams.value[i].length; j++) {
-      sortedByPlayer.value.push({
-        player: teams.value[i][j],
-        team: i + 1,
-        court: Math.floor(i / (isDoubles ? 4 : 2)) + 1
+  // Sort teams by player
+  let playerList = []
+  courts.value.forEach((court, courtIndex) => {
+    Object.entries(court).forEach(([field, teams]) => {
+      teams.forEach((team) => {
+        team.forEach((player) => {
+          playerList.push({
+            player,
+            team: `${field}`,
+            court: courtIndex + 1
+          })
+        })
       })
-    }
-  }
-
-  // Sort the sortedByPlayer array
-  sortedByPlayer.value.sort((a, b) => a.player.localeCompare(b.player))
+    })
+  })
+  sortedByPlayer.value = playerList.sort((a, b) => a.player.localeCompare(b.player)) // Update the value of sortedByPlayer
 }
 </script>
 
@@ -142,9 +145,10 @@ const generateTeams = (numPlayers, numCourts, isDoubles) => {
             ><el-icon><Place /></el-icon> Court {{ index + 1 }}</span
           >
         </el-col>
-        <el-col v-for="(team, teamIndex) in court" :key="teamIndex" :span="24">
-          <el-icon><GoldMedal /></el-icon> Team {{ teamIndex + 1 }}: <el-icon><Avatar /></el-icon>
-          {{ team.join(', ') }}
+        <el-col v-for="(teams, field) in court" :key="field" :span="24">
+          <el-icon><GoldMedal /></el-icon> Team {{ field }} <el-icon><DArrowLeft /></el-icon>
+          <el-icon><Avatar /></el-icon>
+          {{ teams.join(', ') }}
         </el-col>
       </el-row>
     </div>
